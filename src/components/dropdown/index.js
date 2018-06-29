@@ -141,7 +141,9 @@ export default class Dropdown extends PureComponent {
     onLayout: PropTypes.func,
     onFocus: PropTypes.func,
     onBlur: PropTypes.func,
+    onDidBlur: PropTypes.func,
     onChangeText: PropTypes.func,
+    setValue: PropTypes.func,
 
     renderBase: PropTypes.func,
     renderAccessory: PropTypes.func,
@@ -316,7 +318,7 @@ export default class Dropdown extends PureComponent {
   }
 
   onClose(value = this.state.value) {
-    let { onBlur, animationDuration, useNativeDriver } = this.props;
+    let { onBlur, onDidBlur, animationDuration, useNativeDriver } = this.props;
     let { opacity } = this.state;
 
     Animated
@@ -334,6 +336,10 @@ export default class Dropdown extends PureComponent {
 
         if (this.mounted) {
           this.setState({ value, modal: false });
+        }
+        
+        if ('function' === typeof onDidBlur) {
+          onDidBlur(this);
         }
       });
   }
@@ -369,6 +375,12 @@ export default class Dropdown extends PureComponent {
     let { value } = this.state;
 
     return value;
+  }
+
+  setValue(value) {
+    this.setState({
+      value,
+    });
   }
 
   selectedIndex() {

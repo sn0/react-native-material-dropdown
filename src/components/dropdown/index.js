@@ -378,9 +378,11 @@ export default class Dropdown extends PureComponent {
   }
 
   setValue(value) {
-    this.setState({
-      value,
-    });
+    if (this.mounted) {
+      this.setState({
+        value,
+      });      
+    }
   }
 
   selectedIndex() {
